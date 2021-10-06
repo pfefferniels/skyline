@@ -27,6 +27,26 @@ const diff = (instantsToUnify) => {
 
 const Skyline = ({ data, levels }) => {
   const [connectedItems, setConnectedItems] = useState([]);
+
+  const connectToLastItem = (item) => {
+    let lastDuration = connectedItems.at(-1);
+    lastDuration.duration += item.duration;
+    lastDuration.position = Math.min(lastDuration.position, item.position);
+    setConnectedItems((prev) => {
+      return [...prev.slice(0, -1), lastDuration];
+    });
+  };
+
+  const startNewItem = (item) => {
+    setConnectedItems((prev) => [
+      ...prev,
+      {
+        position: item.position,
+        duration: item.duration
+      }
+    ]);
+  };
+
   if (!data) {
     return null;
   }
@@ -74,16 +94,8 @@ const Skyline = ({ data, levels }) => {
                   stroke: "rgb(0,0,0)"
                 }}
                 onClick={(e) => {
-                  if (e.shiftKey) {
-                    let lastConnected =
-                      connectedItems[connectedItems.length - 1];
-                    lastConnected.duration += item.duration;
-                    setConnectedItems((prev) => {
-                      return [...prev.slice(0, -1), lastConnected];
-                    });
-                  } else {
-                    setConnectedItems((prev) => [...prev, item]);
-                  }
+                  if (e.shiftKey) connectToLastItem(item);
+                  else startNewItem(item);
                 }}
               />
             ))}
@@ -104,15 +116,8 @@ const Skyline = ({ data, levels }) => {
               stroke: "rgb(0,0,0)"
             }}
             onClick={(e) => {
-              if (e.shiftKey) {
-                const lastConnected = connectedItems[connectedItems.length - 1];
-                lastConnected.duration += item.duration;
-                setConnectedItems((prev) => {
-                  return [...prev.slice(0, -1), lastConnected];
-                });
-              } else {
-                setConnectedItems((prev) => [...prev, item]);
-              }
+              if (e.shiftKey) connectToLastItem(item);
+              else startNewItem(item);
             }}
           />
         ))}
