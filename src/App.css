@@ -1,0 +1,17 @@
+.import {
+  display: flex;
+  flex-direction: row;
+}
+
+.options {
+  z-index: 1000;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.filename {
+  font-family: monospace;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
