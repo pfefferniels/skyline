@@ -6,6 +6,8 @@ import "./App.css";
 const App = () => {
   const [csv, setCSV] = useState(null);
   const [levels, setLevels] = useState([]);
+  const [factorX, setFactorX] = useState(1);
+  const [factorY, setFactorY] = useState(5);
   const buttonRef = React.createRef();
   const levelsRef = React.createRef();
 
@@ -65,9 +67,34 @@ const App = () => {
           type="text"
           ref={levelsRef}
         />
+
+        <br />
+
+        <label htmlFor="factorX">Horizontal stretch</label>
+        <input
+          name="factorX"
+          onChange={(e) => setFactorX(parseInt(e.target.value, 10))}
+          type="number"
+          value={factorX}
+        />
+
+        <br />
+
+        <label htmlFor="factorY">Vertical stretch</label>
+        <input
+          name="factorY"
+          onChange={(e) => setFactorY(parseInt(e.target.value, 10))}
+          type="number"
+          value={factorY}
+        />
       </div>
       <div>
-        <Skyline data={csv} levels={levels} />
+        <Skyline
+          data={csv}
+          levels={levels}
+          factorX={factorX}
+          factorY={factorY}
+        />
       </div>
     </div>
   );

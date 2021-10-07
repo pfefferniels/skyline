@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 
-const factorX = 5,
-  factorY = 20;
-
 const diff = (instantsToUnify) => {
   return (acc, value, index, array) => {
     const nextInstant = array[index + instantsToUnify];
@@ -26,7 +23,7 @@ const diff = (instantsToUnify) => {
   };
 };
 
-const Skyline = ({ data, levels }) => {
+const Skyline = ({ data, levels, factorX, factorY }) => {
   const [connectedItems, setConnectedItems] = useState([]);
 
   const connectToLastItem = (item) => {
@@ -119,8 +116,8 @@ const Skyline = ({ data, levels }) => {
                 height={item.duration * factorY}
                 style={{
                   fill: item.selected
-                    ? `rgba(${level * 20}, 0, 0, 0.3)`
-                    : `rgba(${level * 20}, ${level * 20}, ${level * 20}, 0.3)`,
+                    ? `rgba(${level * 10}, 0, 0, 0.3)`
+                    : `rgba(0,0,0, 0.3)`,
                   strokeWidth: "1",
                   stroke: "rgb(0,0,0)"
                 }}
