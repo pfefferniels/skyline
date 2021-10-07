@@ -18,7 +18,8 @@ const diff = (instantsToUnify) => {
     const duration = {
       position: currVal,
       duration: nextVal - currVal,
-      label: value.data[1]
+      label: value.data[1],
+      selected: false
     };
 
     return [...acc, duration];
@@ -29,22 +30,29 @@ const Skyline = ({ data, levels }) => {
   const [connectedItems, setConnectedItems] = useState([]);
 
   const connectToLastItem = (item) => {
-    let lastDuration = connectedItems.at(-1);
-    lastDuration.duration += item.duration;
-    lastDuration.position = Math.min(lastDuration.position, item.position);
+    let lastItem = connectedItems.at(-1);
+    lastItem.duration += item.duration;
+    lastItem.position = Math.min(lastItem.position, item.position);
+
     setConnectedItems((prev) => {
-      return [...prev.slice(0, -1), lastDuration];
+      return [...prev.slice(0, -1), lastItem];
     });
   };
 
   const startNewItem = (item) => {
-    setConnectedItems((prev) => [
-      ...prev,
-      {
-        position: item.position,
-        duration: item.duration
-      }
-    ]);
+    const newItem = {
+      position: item.position,
+      duration: item.duration,
+      selected: true
+    };
+
+    const lastItem = connectedItems.at(-1);
+    if (lastItem) {
+      lastItem.selected = false;
+      setConnectedItems((prev) => [...prev.slice(0, -1), lastItem, newItem]);
+    } else {
+      setConnectedItems((prev) => [...prev, newItem]);
+    }
   };
 
   if (!data) {
@@ -76,8 +84,31 @@ const Skyline = ({ data, levels }) => {
         transformOrigin: "center"
       }}
     >
+      <g className={`connectedItems`}>
+        {connectedItems.map((item, i) => (
+          <rect
+            key={`connectedItem${i}`}
+            x={item.position * factorX}
+            y={0}
+            width={item.duration * factorX}
+            height={item.duration * factorY}
+            style={{
+              fill: item.selected
+                ? "rgba(150,0,0,0.2)"
+                : "rgba(255,255,255,0.1)",
+              strokeWidth: "1",
+              stroke: "black"
+            }}
+            onClick={(e) => {
+              if (e.shiftKey) connectToLastItem(item);
+              else startNewItem(item);
+            }}
+          />
+        ))}
+      </g>
+
       {durationLevels &&
-        durationLevels.map((durations, level) => (
+        durationLevels.reverse().map((durations, level) => (
           <g key={`durations${level}`} className={`level${level}`}>
             {durations.map((item, i) => (
               <rect
@@ -87,9 +118,9 @@ const Skyline = ({ data, levels }) => {
                 width={item.duration * factorX}
                 height={item.duration * factorY}
                 style={{
-                  fill: `rgba(${level * 20}, ${level * 20}, ${
-                    level * 20
-                  }, 0.3)`,
+                  fill: item.selected
+                    ? `rgba(${level * 20}, 0, 0, 0.3)`
+                    : `rgba(${level * 20}, ${level * 20}, ${level * 20}, 0.3)`,
                   strokeWidth: "1",
                   stroke: "rgb(0,0,0)"
                 }}
@@ -101,27 +132,6 @@ const Skyline = ({ data, levels }) => {
             ))}
           </g>
         ))}
-
-      <g className={`connectedItems`}>
-        {connectedItems.map((item, i) => (
-          <rect
-            key={`connectedItem${i}`}
-            x={item.position * factorX}
-            y={0}
-            width={item.duration * factorX}
-            height={item.duration * factorY}
-            style={{
-              fill: `rgba(255, 255, 255, 0.1)`,
-              strokeWidth: "1",
-              stroke: "rgb(0,0,0)"
-            }}
-            onClick={(e) => {
-              if (e.shiftKey) connectToLastItem(item);
-              else startNewItem(item);
-            }}
-          />
-        ))}
-      </g>
 
       <line
         className="orientationLine"
