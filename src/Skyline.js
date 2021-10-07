@@ -68,11 +68,14 @@ const Skyline = ({ data, levels, factorX, factorY }) => {
   );
 
   const orientationLine = Math.ceil(maxDuration / 10) * 10;
-  const svgHeight = orientationLine * factorY + 100;
+  const svgHeight = orientationLine * factorY + 50;
+
+  // take last time instant as a reference for the SVG width
+  const svgWidth = data.at(-1).data[0] * factorX;
 
   return (
     <svg
-      width="1000"
+      width={svgWidth}
       height={svgHeight}
       style={{
         bottom: "1rem",
@@ -134,7 +137,7 @@ const Skyline = ({ data, levels, factorX, factorY }) => {
         className="orientationLine"
         x1={0.0}
         y1={orientationLine * factorY}
-        x2={1000}
+        x2={svgWidth}
         y2={orientationLine * factorY}
         stroke="black"
         strokeDasharray="4"
