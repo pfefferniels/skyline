@@ -1,6 +1,7 @@
 .import {
   display: flex;
   flex-direction: row;
+  margin-bottom: 1rem;
 }
 
 .options {
@@ -17,4 +18,11 @@
   font-family: monospace;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.help p,
+.help h2 {
+  margin: 1rem;
+  width: 30vw;
 }
