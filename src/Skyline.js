@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Box from "./Box";
+import OrientationLine from "./OrientationLine";
 
 const diff = (instantsToUnify) => {
   return (acc, value, index, array) => {
@@ -37,11 +39,7 @@ const Skyline = ({ data, levels, factorX, factorY }) => {
   };
 
   const startNewItem = (item) => {
-    const newItem = {
-      position: item.position,
-      duration: item.duration,
-      selected: true
-    };
+    const newItem = { ...item, selected: true };
 
     const lastItem = connectedItems.at(-1);
     if (lastItem) {
@@ -67,8 +65,8 @@ const Skyline = ({ data, levels, factorX, factorY }) => {
     ]
   );
 
-  const orientationLine = Math.ceil(maxDuration / 10) * 10;
-  const svgHeight = orientationLine * factorY + 50;
+  const ceiledMaxDuration = Math.ceil(maxDuration / 10) * 10;
+  const svgHeight = ceiledMaxDuration * factorY + 50;
 
   // take last time instant as a reference for the SVG width
   const svgWidth = data.at(-1).data[0] * factorX;
@@ -86,23 +84,13 @@ const Skyline = ({ data, levels, factorX, factorY }) => {
     >
       <g className={`connectedItems`}>
         {connectedItems.map((item, i) => (
-          <rect
+          <Box
             key={`connectedItem${i}`}
-            x={item.position * factorX}
-            y={0}
-            width={item.duration * factorX}
-            height={item.duration * factorY}
-            style={{
-              fill: item.selected
-                ? "rgba(150,0,0,0.2)"
-                : "rgba(255,255,255,0.1)",
-              strokeWidth: "1",
-              stroke: "black"
-            }}
-            onClick={(e) => {
-              if (e.shiftKey) connectToLastItem(item);
-              else startNewItem(item);
-            }}
+            item={item}
+            factorX={factorX}
+            factorY={factorY}
+            connectToLastItem={connectToLastItem}
+            startNewItem={startNewItem}
           />
         ))}
       </g>
@@ -111,47 +99,23 @@ const Skyline = ({ data, levels, factorX, factorY }) => {
         durationLevels.reverse().map((durations, level) => (
           <g key={`durations${level}`} className={`level${level}`}>
             {durations.map((item, i) => (
-              <rect
-                key={`duration${i}`}
-                x={item.position * factorX}
-                y={0}
-                width={item.duration * factorX}
-                height={item.duration * factorY}
-                style={{
-                  fill: item.selected
-                    ? `rgba(${level * 10}, 0, 0, 0.3)`
-                    : `rgba(0,0,0, 0.3)`,
-                  strokeWidth: "1",
-                  stroke: "rgb(0,0,0)"
-                }}
-                onClick={(e) => {
-                  if (e.shiftKey) connectToLastItem(item);
-                  else startNewItem(item);
-                }}
+              <Box
+                key={`box${i}`}
+                item={item}
+                factorX={factorX}
+                factorY={factorY}
+                connectToLastItem={connectToLastItem}
+                startNewItem={startNewItem}
               />
             ))}
           </g>
         ))}
 
-      <line
-        className="orientationLine"
-        x1={0.0}
-        y1={orientationLine * factorY}
-        x2={svgWidth}
-        y2={orientationLine * factorY}
-        stroke="black"
-        strokeDasharray="4"
+      <OrientationLine
+        ceiledMaxDuration={ceiledMaxDuration}
+        y={ceiledMaxDuration * factorY}
+        width={svgWidth}
       />
-      <text
-        x={0.0}
-        y={svgHeight - orientationLine * factorY - 10}
-        style={{
-          transform: "scale(1, -1)",
-          transformOrigin: "center"
-        }}
-      >
-        {orientationLine}s
-      </text>
     </svg>
   );
 };
