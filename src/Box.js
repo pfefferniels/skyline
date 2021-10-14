@@ -14,11 +14,13 @@ const Box = ({
   factorY,
   connectToLastItem,
   startNewItem,
-  level
+  svgHeight
 }) => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [fill, setFill] = useState("rgba(0,0,0,0.3");
+  const [color, setColor] = useState("0,0,0,0.3");
   const [label, setLabel] = useState("");
+
+  const handleClose = () => setEditDialogOpen(false);
 
   return (
     <>
@@ -28,7 +30,7 @@ const Box = ({
         width={item.duration * factorX}
         height={item.duration * factorY}
         style={{
-          fill,
+          fill: `rgba(${color})`,
           strokeWidth: item.selected ? "2" : "1",
           stroke: "black"
         }}
@@ -43,19 +45,39 @@ const Box = ({
         }}
       />
 
-      <text>{label}</text>
+      <text
+        x={factorX * (item.duration / 2 + item.position)}
+        y={svgHeight - item.duration * factorY - 5}
+        textAnchor="middle"
+        style={{
+          transform: "scale(1, -1)",
+          transformOrigin: "center"
+        }}
+      >
+        {label}
+      </text>
 
-      <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
+      <Dialog open={editDialogOpen} onClose={handleClose}>
         <DialogTitle>Edit Box</DialogTitle>
 
         <DialogContent>
-          <TextField label="Label" size="small" />
-          <TextField label="Color" size="small" />
+          <TextField
+            label="Label"
+            size="small"
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+          />
+          <TextField
+            label="Color"
+            size="small"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            placeholder={"Enter in the form 'r,g,b,a'"}
+          />
         </DialogContent>
 
         <DialogActions>
-          <Button>Apply</Button>
-          <Button>Cancel</Button>
+          <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
     </>

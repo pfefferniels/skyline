@@ -91,6 +91,7 @@ const Skyline = ({ data, levels, factorX, factorY }) => {
             factorY={factorY}
             connectToLastItem={connectToLastItem}
             startNewItem={startNewItem}
+            svgHeight={svgHeight}
           />
         ))}
       </g>
@@ -106,6 +107,7 @@ const Skyline = ({ data, levels, factorX, factorY }) => {
                 factorY={factorY}
                 connectToLastItem={connectToLastItem}
                 startNewItem={startNewItem}
+                svgHeight={svgHeight}
               />
             ))}
           </g>
