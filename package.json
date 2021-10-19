@@ -4,6 +4,7 @@
   "description": "create tempo graphs à la Gottschewski",
   "keywords": [],
   "main": "src/index.js",
+  "homepage": "https://pfefferniels.github.io/skyline/build",
   "dependencies": {
     "@emotion/react": "11.4.1",
     "@emotion/styled": "11.3.0",
