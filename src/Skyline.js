@@ -3,13 +3,14 @@ import Box from "./Box";
 import OrientationLine from "./OrientationLine";
 
 const diff = (instantsToUnify) => {
-  return (acc, value, index, array) => {
+  return (acc, currentInstant, index, array) => {
     const nextInstant = array[index + instantsToUnify];
-    if ((index + instantsToUnify - 1) % instantsToUnify !== 0 || !nextInstant) {
+
+    if (index % instantsToUnify !== 0 || !nextInstant) {
       return acc;
     }
 
-    const currVal = parseFloat(value.data[0]);
+    const currVal = parseFloat(currentInstant.data[0]);
     const nextVal = parseFloat(nextInstant.data[0]);
 
     if (isNaN(currVal)) return acc;
@@ -17,7 +18,7 @@ const diff = (instantsToUnify) => {
     const duration = {
       position: currVal,
       duration: nextVal - currVal,
-      label: value.data[1],
+      label: currentInstant.data[1],
       selected: false
     };
 
@@ -25,7 +26,7 @@ const diff = (instantsToUnify) => {
   };
 };
 
-const Skyline = ({ data, levels, factorX, factorY }) => {
+const Skyline = ({ data, upbeat, levels, factorX, factorY }) => {
   const [connectedItems, setConnectedItems] = useState([]);
 
   const connectToLastItem = (item) => {
@@ -55,8 +56,14 @@ const Skyline = ({ data, levels, factorX, factorY }) => {
   }
 
   const durationLevels = levels
-    .map((level) => data.reduce(diff(level), []))
+    .map((level) => data.slice(upbeat).reduce(diff(level), []))
     .reduce((acc, current) => [...acc, current], []);
+  
+  const level1 = durationLevels[levels.indexOf(1)]
+  if (level1) {
+    const upbeats = data.slice(0,upbeat + 1).reduce(diff(1), [])
+    level1.push(...upbeats)
+  }
 
   const maxDuration = Math.max(
     ...[

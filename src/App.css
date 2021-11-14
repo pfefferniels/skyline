@@ -15,10 +15,11 @@
 }
 
 .filename {
+  display:flex;
+  align-items:center;
   font-family: monospace;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-  vertical-align: middle;
 }
 
 .help p,

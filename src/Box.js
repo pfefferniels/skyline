@@ -66,6 +66,7 @@ const Box = ({
             size="small"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
+            autofocus
           />
           <TextField
             label="Color"

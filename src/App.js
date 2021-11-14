@@ -14,6 +14,7 @@ import "./App.css";
 
 const App = () => {
   const [csv, setCSV] = useState(null);
+  const [upbeat, setUpbeat] = useState(0);
   const [levels, setLevels] = useState([]);
   const [factorX, setFactorX] = useState(1);
   const [factorY, setFactorY] = useState(5);
@@ -69,7 +70,7 @@ const App = () => {
             {({ file }) => (
               <div className="import">
                 <Button
-                  size="smalL"
+                  size="small"
                   variant="contained"
                   onClick={handleOpenDialog}
                 >
@@ -88,6 +89,15 @@ const App = () => {
               </div>
             )}
           </CSVReader>
+
+          <TextField
+            size="small"
+            label="Upbeat"
+            placeholder="number of instants in upbeat"
+            type="number"
+            value={upbeat}
+            onChange={(e) => setUpbeat(parseInt(e.target.value, 10))}
+          />
 
           <TextField
             size="small"
@@ -116,7 +126,7 @@ const App = () => {
           />
         </Box>
       </div>
-      <Skyline data={csv} levels={levels} factorX={factorX} factorY={factorY} />
+      <Skyline data={csv} upbeat={upbeat} levels={levels} factorX={factorX} factorY={factorY} />
       <Drawer
         className="help"
         anchor="right"
@@ -137,10 +147,19 @@ const App = () => {
           arbitrary amount of layers.
         </p>
         <p>
+          Upbeat measures can be specified by defining the number of instants 
+          that are part of an upbeat.
+        </p>
+        <p>
           In case you want to combine two boxes outside a regular scheme that
           applies for the whole piece, you can do so be clicking on the first
           first box, then keeping the shift key down and clicking on an adjecent
           box. A new box will appear that includes both.
+        </p>
+        <p>
+          In order to change the visual appearence of a box, hold the alt key and 
+          click on the box you want to edit. Here you can add a label text and change 
+          color and transparency of a box.
         </p>
         <h2>Example</h2>
         <p>...</p>
