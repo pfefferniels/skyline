@@ -92,8 +92,7 @@ const App = () => {
 
           <TextField
             size="small"
-            label="Upbeat"
-            placeholder="number of instants in upbeat"
+            label="Upbeat length"
             type="number"
             value={upbeat}
             onChange={(e) => setUpbeat(parseInt(e.target.value, 10))}

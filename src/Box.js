@@ -7,6 +7,7 @@ import {
   DialogActions,
   TextField
 } from "@mui/material";
+import { HexColorPicker } from "react-colorful";
 
 const Box = ({
   item,
@@ -17,7 +18,7 @@ const Box = ({
   svgHeight
 }) => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [color, setColor] = useState("0,0,0,0.3");
+  const [color, setColor] = useState("#0000004d");
   const [label, setLabel] = useState("");
 
   const handleClose = () => setEditDialogOpen(false);
@@ -30,7 +31,7 @@ const Box = ({
         width={item.duration * factorX}
         height={item.duration * factorY}
         style={{
-          fill: `rgba(${color})`,
+          fill: color,
           strokeWidth: item.selected ? "2" : "1",
           stroke: "black"
         }}
@@ -68,13 +69,8 @@ const Box = ({
             onChange={(e) => setLabel(e.target.value)}
             autofocus
           />
-          <TextField
-            label="Color"
-            size="small"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            placeholder={"Enter in the form 'r,g,b,a'"}
-          />
+
+          <HexColorPicker color={color} onChange={setColor} />
         </DialogContent>
 
         <DialogActions>
