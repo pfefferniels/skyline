@@ -98,6 +98,9 @@ const Skyline = ({ data, upbeat, levels, factorX, factorY }) => {
             factorY={factorY}
             connectToLastItem={connectToLastItem}
             startNewItem={startNewItem}
+            removeItem={() => {
+              setConnectedItems(connectedItems.filter(el => el !== item))
+            }}
             svgHeight={svgHeight}
           />
         ))}
@@ -114,6 +117,9 @@ const Skyline = ({ data, upbeat, levels, factorX, factorY }) => {
                 factorY={factorY}
                 connectToLastItem={connectToLastItem}
                 startNewItem={startNewItem}
+                removeItem={() => {
+                  setConnectedItems(connectedItems.filter(el => (el.position !== item.position) && (el.duration !== item.duration)))
+                }}
                 svgHeight={svgHeight}
               />
             ))}

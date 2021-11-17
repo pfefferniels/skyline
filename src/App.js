@@ -152,11 +152,15 @@ const App = () => {
         <p>
           In case you want to combine two boxes outside a regular scheme that
           applies for the whole piece, you can do so be clicking on the first
-          first box, then keeping the shift key down and clicking on an adjecent
+          first box, then keeping the <kbd>shift</kbd> key down and clicking on an adjecent
           box. A new box will appear that includes both.
         </p>
         <p>
-          In order to change the visual appearence of a box, hold the alt key and 
+          In order to delete wrongly combined boxes, hold <kbd>shift</kbd> and <kbd>alt</kbd> at 
+          the same time and click on the box to be delted.
+        </p>
+        <p>
+          In order to change the visual appearence of a box, hold the <kbd>alt</kbd> key and 
           click on the box you want to edit. Here you can add a label text and change 
           color and transparency of a box.
         </p>

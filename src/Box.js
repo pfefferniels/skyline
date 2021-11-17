@@ -15,6 +15,7 @@ const Box = ({
   factorY,
   connectToLastItem,
   startNewItem,
+  removeItem,
   svgHeight
 }) => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -36,6 +37,11 @@ const Box = ({
           stroke: "black"
         }}
         onClick={(e) => {
+          if (e.altKey && e.shiftKey) {
+            removeItem()
+            return;
+          }
+
           if (e.altKey) {
             setEditDialogOpen(true);
             return;
@@ -67,7 +73,7 @@ const Box = ({
             size="small"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            autofocus
+            autoFocus
           />
 
           <HexColorPicker color={color} onChange={setColor} />
