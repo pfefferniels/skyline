@@ -125,7 +125,9 @@ const App = () => {
           />
         </Box>
       </div>
+
       <Skyline data={csv} upbeat={upbeat} levels={levels} factorX={factorX} factorY={factorY} />
+
       <Drawer
         className="help"
         anchor="right"
@@ -167,6 +169,8 @@ const App = () => {
         <h2>Example</h2>
         <p>...</p>
       </Drawer>
+
+      <div className='copyright'>© Niels Pfeffer</div>
     </div>
   );
 };
