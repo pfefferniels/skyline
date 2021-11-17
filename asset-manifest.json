@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/skyline/static/css/main.1d069c34.chunk.css",
-    "main.js": "/skyline/static/js/main.21ec9caa.chunk.js",
-    "main.js.map": "/skyline/static/js/main.21ec9caa.chunk.js.map",
+    "main.js": "/skyline/static/js/main.aa7cf5d1.chunk.js",
+    "main.js.map": "/skyline/static/js/main.aa7cf5d1.chunk.js.map",
     "runtime-main.js": "/skyline/static/js/runtime-main.0d5d2cdd.js",
     "runtime-main.js.map": "/skyline/static/js/runtime-main.0d5d2cdd.js.map",
     "static/js/2.1ef500a8.chunk.js": "/skyline/static/js/2.1ef500a8.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.0d5d2cdd.js",
     "static/js/2.1ef500a8.chunk.js",
     "static/css/main.1d069c34.chunk.css",
-    "static/js/main.21ec9caa.chunk.js"
+    "static/js/main.aa7cf5d1.chunk.js"
   ]
 }
