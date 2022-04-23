@@ -1,20 +1,15 @@
 {
   "files": {
-    "main.css": "/skyline/static/css/main.0d02c9aa.chunk.css",
-    "main.js": "/skyline/static/js/main.89dd1b35.chunk.js",
-    "main.js.map": "/skyline/static/js/main.89dd1b35.chunk.js.map",
-    "runtime-main.js": "/skyline/static/js/runtime-main.0d5d2cdd.js",
-    "runtime-main.js.map": "/skyline/static/js/runtime-main.0d5d2cdd.js.map",
-    "static/js/2.1ef500a8.chunk.js": "/skyline/static/js/2.1ef500a8.chunk.js",
-    "static/js/2.1ef500a8.chunk.js.map": "/skyline/static/js/2.1ef500a8.chunk.js.map",
+    "main.css": "/skyline/static/css/main.499a6492.css",
+    "main.js": "/skyline/static/js/main.7c744947.js",
+    "static/js/787.bfe2863c.chunk.js": "/skyline/static/js/787.bfe2863c.chunk.js",
     "index.html": "/skyline/index.html",
-    "static/css/main.0d02c9aa.chunk.css.map": "/skyline/static/css/main.0d02c9aa.chunk.css.map",
-    "static/js/2.1ef500a8.chunk.js.LICENSE.txt": "/skyline/static/js/2.1ef500a8.chunk.js.LICENSE.txt"
+    "main.499a6492.css.map": "/skyline/static/css/main.499a6492.css.map",
+    "main.7c744947.js.map": "/skyline/static/js/main.7c744947.js.map",
+    "787.bfe2863c.chunk.js.map": "/skyline/static/js/787.bfe2863c.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.0d5d2cdd.js",
-    "static/js/2.1ef500a8.chunk.js",
-    "static/css/main.0d02c9aa.chunk.css",
-    "static/js/main.89dd1b35.chunk.js"
+    "static/css/main.499a6492.css",
+    "static/js/main.7c744947.js"
   ]
 }
