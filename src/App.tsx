@@ -1,24 +1,105 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Butterfly from './Butterfly';
 import './App.css';
+import { Slider, Box, Button, Drawer, IconButton } from '@mui/material';
+import { Duration } from './Duration';
+import { DataImport } from './DataImport';
+import { Help } from './Help';
+import MenuIcon from '@mui/icons-material/Menu'
+
+function downloadBlob(blob: Blob, filename: string) {
+  const objectUrl = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = objectUrl
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  setTimeout(() => URL.revokeObjectURL(objectUrl), 5000)
+}
 
 function App() {
+  const [upperDurations, setUpperDurations] = useState<Duration[]>([])
+  const [lowerDurations, setLowerDurations] = useState<Duration[]>([])
+  const [showHelp, setShowHelp] = useState<boolean>(false)
+  const [showToolbox, setShowToolbox] = useState<boolean>(false)
+  const [stretchX, setStretchX] = useState<number>(8)
+  const [stretchY, setStretchY] = useState<number>(8)
+
+  const parseDurationsFromCSV = (data: any[]) => {
+    const durations: Duration[] = []
+    for (let i=0; i<data.length-1; i++) {
+      durations.push({
+        start: +data[i][0],
+        end: +data[i+1][0],
+        /*label: data[i][1] */ // TODO make this optional
+        color: 'gray', 
+        selected: false
+      })
+    }
+    return durations
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="root">
+      <div className='horizontalStretch'>
+        <Slider
+          aria-label="Horizontal Stretch"
+          valueLabelDisplay="auto"
+          defaultValue={8} step={2} min={1} max={50} marks
+          onChange={(event: Event, value: number | number[]) => setStretchX(value as number)}
+        />
+      </div>
+
+      <div className='verticalStretch'>
+        <Slider
+          sx={{
+            '& input[type="range"]': {
+              WebkitAppearance: 'slider-vertical',
+            },
+          }}
+          aria-label="Vertical Stretch"
+          orientation="vertical"
+          valueLabelDisplay="auto"
+          defaultValue={8} step={2} min={1} max={80} marks
+          onChange={(event: Event, value: number | number[]) => setStretchY(value as number)}
+        />
+      </div>
+
+      <Drawer anchor='left' open={showToolbox} onClose={() => setShowToolbox(false)}>
+        <Box>
+          <Button onClick={() => setShowHelp(true)}>How to use?</Button>
+          <DataImport label={'upper wing'} ready={(data) => setUpperDurations([...parseDurationsFromCSV(data)])} />
+          <DataImport label={'lower wing'} ready={(data) => setLowerDurations(parseDurationsFromCSV(data))} />
+          <Button onClick={() => {
+            const svgContainer = document.querySelector('#svgContainer')
+            if (!svgContainer) return
+            const svg = svgContainer.innerHTML || ''
+            const blob = new Blob([svg], { type: 'image/svg+xml' })
+            downloadBlob(blob, 'skyline.svg')
+          }} variant='outlined'>download SVG</Button>
+        </Box>
+      </Drawer>
+
+      <Help open={showHelp} onClose={() => setShowHelp(false)} />
+
+      <IconButton
+        style={{position: 'absolute', top: '1rem', left: '1rem'}}
+        color="inherit"
+        aria-label="open drawer"
+        onClick={() => setShowToolbox(true)}
+        edge="start"
+      >
+        <MenuIcon />
+      </IconButton>
+
+      <div className='copyright'>© Niels Pfeffer</div>
+    
+      <Butterfly
+        stretchX={stretchX}
+        stretchY={stretchY}
+        upperDurations={upperDurations} setUpperDurations={setUpperDurations}
+        lowerDurations={lowerDurations} setLowerDurations={setLowerDurations} />
     </div>
   );
 }
