@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import Butterfly from './Butterfly';
 import './App.css';
 import { Slider, Box, Button, Drawer, IconButton } from '@mui/material';
@@ -25,6 +25,8 @@ function App() {
   const [showToolbox, setShowToolbox] = useState<boolean>(false)
   const [stretchX, setStretchX] = useState<number>(8)
   const [stretchY, setStretchY] = useState<number>(8)
+
+  const jsonInputFile = useRef(null)
 
   const parseDurationsFromCSV = (data: any[]) => {
     const durations: Duration[] = []
@@ -71,6 +73,7 @@ function App() {
           <Button onClick={() => setShowHelp(true)}>How to use?</Button>
           <DataImport label={'upper wing'} ready={(data) => setUpperDurations([...parseDurationsFromCSV(data)])} />
           <DataImport label={'lower wing'} ready={(data) => setLowerDurations(parseDurationsFromCSV(data))} />
+
           <Button onClick={() => {
             const svgContainer = document.querySelector('#svgContainer')
             if (!svgContainer) return
@@ -78,6 +81,39 @@ function App() {
             const blob = new Blob([svg], { type: 'image/svg+xml' })
             downloadBlob(blob, 'skyline.svg')
           }} variant='outlined'>download SVG</Button>
+
+          <br/>
+          <Button onClick={() => {
+            const json = JSON.stringify({
+              upper: upperDurations,
+              lower: lowerDurations
+            })
+            const blob = new Blob([json], { type: 'application/json' })
+            downloadBlob(blob, 'skyline.json')
+          }}>Save JSON</Button>
+
+          <input type='file'
+                 id='file'
+                 ref={jsonInputFile}
+                 style={{ display: "none" }}
+                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                   if (event.target && event.target.files) {
+                    let file = event.target.files[0]
+                    var reader = new FileReader()
+                    reader.onload = (e: ProgressEvent<FileReader>) => {
+                      if (e.target) {
+                        const importedButterfly = JSON.parse(e.target.result as string)
+                        setUpperDurations(importedButterfly.upper)
+                        setLowerDurations(importedButterfly.lower)
+                      }
+                    }
+                    reader.readAsText(file)
+                  }
+                 }} />
+          <Button onClick={() => {
+              if (jsonInputFile && jsonInputFile.current) {
+                (jsonInputFile.current as HTMLElement).click()
+              }}}>Load JSON</Button>
         </Box>
       </Drawer>
 
