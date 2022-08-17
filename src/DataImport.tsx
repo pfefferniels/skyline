@@ -11,16 +11,38 @@ import { Duration } from "./Duration"
  * @returns array of `Duration`
  */
 const parseDurationsFromCSV = (data: any[]): Duration[] => {
-    const durations: Duration[] = []
-    for (let i = 0; i < data.length - 1; i++) {
-        durations.push({
-            start: +data[i][0],
-            end: +data[i + 1][0],
-            /*label: data[i][1] */ // TODO make this optional
-            color: 'gray',
-            selected: false
-        })
+    if (data.length === 0) {
+        return []
     }
+
+    const durations: Duration[] = []
+
+    // interpret the imported data as a durations layer
+    if (data[0].length === 4) {
+        for (let i = 0; i < data.length - 1; i++) {
+            durations.push({
+                start: +data[i][0],
+                end: (+data[i][0]) + (+data[i][2]),
+                label: data[i][3],
+                degree: +data[i][1],
+                color: 'white',
+                selected: false
+            })
+        }
+    }
+    // interpret the imported data as a time instants layer
+    else if (data[0].length === 2) {
+        for (let i = 0; i < data.length - 1; i++) {
+            durations.push({
+                start: +data[i][0],
+                end: +data[i + 1][0],
+                /*label: data[i][1] */ // TODO make this optional
+                color: 'gray',
+                selected: false
+            })
+        }
+    }
+
     return durations
 }
 
