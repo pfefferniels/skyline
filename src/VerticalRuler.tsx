@@ -8,9 +8,7 @@ type VerticalRulerProps = {
 export function VerticalRuler(props: VerticalRulerProps) {
   const { stretchY, x, ticks, height } = props
 
-  let nTicks = Math.abs(Math.floor(height/ticks))
-  if (nTicks <= 0) nTicks = 1
-  console.log('nticks', nTicks)
+  let nTicks = Math.max(1, Math.abs(Math.floor((height/stretchY)/ticks)) + 1)
 
   return (
     <g className='verticalRuler'>

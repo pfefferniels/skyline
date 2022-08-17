@@ -4,9 +4,8 @@ import './App.css';
 import { Slider, Box, Button, Drawer, IconButton } from '@mui/material';
 import { Duration } from './Duration';
 import { Help } from './Help';
-import HelpOutline from '@mui/icons-material/HelpOutline'
 import { DataImport } from './DataImport';
-import { ImportExportOutlined, TuneOutlined } from '@mui/icons-material';
+import { HelpOutlined, UploadFileOutlined, SaveAsOutlined, TuneOutlined } from '@mui/icons-material';
 import { Export } from './Export';
 
 function App() {
@@ -101,16 +100,22 @@ function App() {
           width: 'fit-content'
         }}>
         <IconButton
-          aria-label="open help"
-          onClick={() => setShowHelp(true)}>
-          <HelpOutline />
+          aria-label="upload file"
+          disabled={!importReady}
+          onClick={() => {
+            // start all over
+            setUpperDurations([])
+            setLowerDurations([])
+            setImportReady(false)
+          }}>
+          <UploadFileOutlined />
         </IconButton>
 
         <IconButton
           aria-label="export"
           disabled={!importReady}
           onClick={() => setShowExport(true)}>
-          <ImportExportOutlined />
+          <SaveAsOutlined />
         </IconButton>
 
         <IconButton
@@ -118,6 +123,12 @@ function App() {
           disabled={!importReady}
           onClick={() => setShowToolbox(true)}>
           <TuneOutlined />
+        </IconButton>
+
+        <IconButton
+          aria-label="open help"
+          onClick={() => setShowHelp(true)}>
+          <HelpOutlined />
         </IconButton>
       </Box>
 

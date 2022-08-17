@@ -15,20 +15,18 @@ const parseDurationsFromCSV = (data: any[]): Duration[] => {
         return []
     }
 
-    const durations: Duration[] = []
+    let durations: Duration[] = []
 
     // interpret the imported data as a durations layer
     if (data[0].length === 4) {
-        for (let i = 0; i < data.length - 1; i++) {
-            durations.push({
-                start: +data[i][0],
-                end: (+data[i][0]) + (+data[i][2]),
-                label: data[i][3],
-                degree: +data[i][1],
-                color: 'white',
-                selected: false
-            })
-        }
+        durations = data.map(row => ({
+            start: +row[0],
+            end: (+row[0]) + (+row[2]),
+            label: row[3],
+            degree: +row[1],
+            color: 'white',
+            selected: false
+        }))
     }
     // interpret the imported data as a time instants layer
     else if (data[0].length === 2) {
