@@ -21,36 +21,45 @@ export default function Butterfly(props: ButterflyProps) {
     )
   }
 
+  const upperStart = (upperDurations && upperDurations.length) ? Math.min(...upperDurations.map(d => d.start)) : 0
+  const lowerStart = (lowerDurations && lowerDurations.length) ? Math.min(...lowerDurations.map(d => d.start)) : 0
   const upperEnd = (upperDurations && upperDurations.length) ? Math.max(...upperDurations.map(d => d.end)) : 0
   const lowerEnd = (lowerDurations && lowerDurations.length) ? Math.max(...lowerDurations.map(d => d.end)) : 0
   const upperVerticalMax = (upperDurations && upperDurations.length) ? Math.max(...upperDurations.map(d => d.end - d.start)) : 0
   const lowerVerticalMax = (lowerDurations && lowerDurations.length) ? Math.max(...lowerDurations.map(d => d.end - d.start)) : 0
   const upperHeight = stretchY * upperVerticalMax
   const lowerHeight = stretchY * lowerVerticalMax
-  const width = stretchX * Math.max(upperEnd, lowerEnd)
+
+  const startX = stretchX * Math.min(upperStart, lowerStart)
+  const endX = stretchX * Math.max(upperEnd, lowerEnd)
+  const width = endX - startX
+
+  const margin = 15
 
   return (
     <div id="svgContainer">
-      <svg className='butterfly'
-           width={width + 10}
-           height={upperHeight + lowerHeight + 10}
-           viewBox={`0 ${-upperHeight-10} ${width} ${upperHeight + lowerHeight + 10}`}>
-        {upperDurations && setUpperDurations && 
+      <svg
+        className='butterfly'
+        width={width + 10}
+        height={upperHeight + lowerHeight + 10}
+        viewBox={`${startX - margin} ${-upperHeight - margin} ${width + margin} ${upperHeight + lowerHeight + margin}`}>
+        {upperDurations && setUpperDurations &&
           <>
-            <VerticalRuler x={30} height={-upperHeight} stretchY={stretchY} ticks={5} />
+            <VerticalRuler x={startX - margin / 2} height={-upperHeight} stretchY={stretchY} ticks={5} />
             <Skyline stretchX={stretchX}
-                     stretchY={stretchY}
-                     durations={upperDurations}
-                     setDurations={setUpperDurations} />
+              stretchY={stretchY}
+              durations={upperDurations}
+              setDurations={setUpperDurations} />
           </>}
 
         {lowerDurations && setLowerDurations &&
           <>
-            <VerticalRuler x={30} height={-upperHeight} stretchY={-stretchY} ticks={5} />
-            <Skyline stretchX={stretchX}
-                     stretchY={-stretchY}
-                     durations={lowerDurations}
-                     setDurations={setLowerDurations} />
+            <VerticalRuler x={startX - margin / 2} height={-upperHeight} stretchY={-stretchY} ticks={5} />
+            <Skyline
+              stretchX={stretchX}
+              stretchY={-stretchY}
+              durations={lowerDurations}
+              setDurations={setLowerDurations} />
           </>}
       </svg>
     </div>
