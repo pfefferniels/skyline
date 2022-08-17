@@ -50,9 +50,9 @@ export default function Butterfly(props: ButterflyProps) {
     <div id='svgContainer'>
       <svg
         className='butterfly'
-        style={{ margin: '3rem'}}
-        width={width + margin}
-        height={upperHeight + lowerHeight + margin*2}
+        style={{ margin: '3rem' }}
+        width={width + margin * 2}
+        height={upperHeight + lowerHeight + margin * 2}
         viewBox={[startX - margin,                    // x
                   -upperHeight - margin,              // y
                   width + margin,                     // width
@@ -62,7 +62,11 @@ export default function Butterfly(props: ButterflyProps) {
 
         {hasUpperDurations &&
           <>
-            <VerticalRuler x={startX} height={-upperHeight} stretchY={stretchY} ticks={5} />
+            {upperDurations[0].degree ?
+              <VerticalRuler x={startX} height={-upperHeight} stretchY={stretchY} minDegree={0} maxDegree={7} />
+              :
+              <VerticalRuler x={startX} height={-upperHeight} stretchY={stretchY} ticks={5} />
+            }
             <Skyline
               stretchX={stretchX}
               stretchY={stretchY}
