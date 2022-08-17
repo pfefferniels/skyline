@@ -9,6 +9,12 @@ type SkylineProps = {
   stretchY: number
 }
 
+/**
+ * This component sorts the `Duration` objects by their length,
+ * renders them as `Box` components, provides functionalities
+ * to combine durations and change their appearances.
+ * 
+ */
 export function Skyline(props: SkylineProps) {
   const { durations, setDurations } = props
 
