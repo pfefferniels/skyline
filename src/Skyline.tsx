@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { Box } from "./Box"
 import { Duration } from "./Duration"
 
@@ -28,19 +28,6 @@ export function Skyline(props: SkylineProps) {
     const lengthA = a.end - a.start 
     const lengthB = b.end - b.start
     return lengthB - lengthA
-  }
-
-  const addGrouping = (upbeatLength: number, groupSize: number) => {
-    const newDurations = [...durations]
-    for (let i=upbeatLength; i+groupSize<durations.length; i+=groupSize) {
-      newDurations.push({
-        start: durations[i].start,
-        end: durations[i+groupSize-1].end,
-        color: 'blue',
-        selected: false
-      })
-    }
-    setDurations(newDurations)
   }
 
   return (

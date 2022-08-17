@@ -1,43 +1,121 @@
-import { Button, Tooltip, IconButton } from "@mui/material"
-import { useCSVReader } from "react-papaparse"
-import DeleteIcon from "@mui/icons-material/Delete"
+import { Button, Box, Grid, Divider } from "@mui/material"
+import { CSVImportButton } from "./CSVImportButton"
+import { ChangeEvent, useRef } from "react"
+import { Duration } from "./Duration"
+
+/**
+ * converts data imported from the given CSV file into 
+ * an array of `Duration` objects.
+ * 
+ * @param data CSV data as given by the papaparse library
+ * @returns array of `Duration`
+ */
+const parseDurationsFromCSV = (data: any[]): Duration[] => {
+    const durations: Duration[] = []
+    for (let i = 0; i < data.length - 1; i++) {
+        durations.push({
+            start: +data[i][0],
+            end: +data[i + 1][0],
+            /*label: data[i][1] */ // TODO make this optional
+            color: 'gray',
+            selected: false
+        })
+    }
+    return durations
+}
 
 type DataImportProps = {
-  label: string
-  ready: (data: any[]) => void
+    setDurations: (durations: Duration[]) => void
+    setSecondaryDurations: (durations: Duration[]) => void
+    setImportReady: (ready: boolean) => void
 }
+
 
 export function DataImport(props: DataImportProps) {
-  const { ready, label } = props 
-  const { CSVReader } = useCSVReader()
+    const { setDurations, setSecondaryDurations, setImportReady } = props
+    const jsonInputFile = useRef(null)
 
-  return (
-    <CSVReader onUploadAccepted={(results: any) => {
-        if (results.data) ready(results.data)
-      }}>
-      {({
-        getRootProps,
-        acceptedFile,
-        getRemoveFileProps,
-      }: any) => (
-        <>
-          <div className='import'>
-            <div className='importLabel'>{label}</div>
-            <Button size='small' variant='contained' {...getRootProps()}>
-              open csv file 
-            </Button>
-            <div className='filename'>
-              {acceptedFile && acceptedFile.name}
-            </div>
-            <Tooltip title="Delete">
-                <IconButton {...getRemoveFileProps()}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-          </div>
-        </>
-      )}
-    </CSVReader>
-  )
+    return (
+        <Grid
+            container
+            spacing={0}
+            direction='column'
+            alignItems="center"
+            justifyContent="center"
+            style={{ minHeight: '90vh' }}
+        >
+
+            <Grid item xs={3}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        flexDirection: 'row',
+                    }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'flex-end',
+                            flexDirection: 'column',
+                        }}>
+                        <Box sx={{ textTransform: 'uppercase', m: 1 }}>
+                            Import CSV from Sonic Visualiser
+                        </Box>
+
+                        <CSVImportButton label={''} ready={(data) => setDurations([...parseDurationsFromCSV(data)])} />
+                        <CSVImportButton label={''} ready={(data) => setSecondaryDurations(parseDurationsFromCSV(data))} />
+
+                        <Button
+                            variant='contained'
+                            onClick={() => setImportReady(true)}>Render</Button>
+                    </Box>
+
+                    <Divider orientation='vertical' flexItem>or</Divider>
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            flexDirection: 'column',
+                        }}>
+
+                        <Box sx={{ textTransform: 'uppercase', m: 1 }}>
+                            Load existing JSON
+                        </Box>
+
+                        <input type='file'
+                            id='file'
+                            ref={jsonInputFile}
+                            style={{ display: "none" }}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                                if (event.target && event.target.files) {
+                                    let file = event.target.files[0]
+                                    var reader = new FileReader()
+                                    reader.onload = (e: ProgressEvent<FileReader>) => {
+                                        if (e.target) {
+                                            const importedButterfly = JSON.parse(e.target.result as string)
+                                            setDurations(importedButterfly.upper)
+                                            setSecondaryDurations(importedButterfly.lower)
+                                            setImportReady(true)
+                                        }
+                                    }
+                                    reader.readAsText(file)
+                                }
+                            }} />
+
+                        <Button
+                            sx={{ m: 1 }}
+                            variant='outlined'
+                            onClick={() => {
+                                if (jsonInputFile && jsonInputFile.current) {
+                                    (jsonInputFile.current as HTMLElement).click()
+                                }
+                            }}>
+                            Load JSON
+                        </Button>
+                    </Box>
+                </Box>
+            </Grid>
+        </Grid>
+    )
 }
-  
