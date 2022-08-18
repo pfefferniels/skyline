@@ -2,6 +2,7 @@ import { Button, Box, Grid, Divider } from "@mui/material"
 import { CSVImportButton } from "./CSVImportButton"
 import { ChangeEvent, useRef } from "react"
 import { Duration } from "./Duration"
+import AddIcon from '@mui/icons-material/Add';
 
 /**
  * converts data imported from the given CSV file into 
@@ -50,7 +51,16 @@ type DataImportProps = {
     setImportReady: (ready: boolean) => void
 }
 
-
+/**
+ * A component which allows importing either CSV data or an 
+ * existing JSON file. The resulting data will be passed to the 
+ * `setDurations` and `setSecondaryDurations` props. Once the
+ * import is completed, `setImportReady` will be called.
+ * 
+ * @prop setDurations - called once parsing is done
+ * @prop setSecondaryDurations - called once parsing is done
+ * @prop setImportReady - called once import is ready
+ */
 export function DataImport(props: DataImportProps) {
     const { setDurations, setSecondaryDurations, setImportReady } = props
     const jsonInputFile = useRef(null)
@@ -82,8 +92,16 @@ export function DataImport(props: DataImportProps) {
                             Import CSV from Sonic Visualiser
                         </Box>
 
-                        <CSVImportButton label={''} ready={(data) => setDurations([...parseDurationsFromCSV(data)])} />
-                        <CSVImportButton label={''} ready={(data) => setSecondaryDurations(parseDurationsFromCSV(data))} />
+                        <CSVImportButton
+                            tooltip={'Given data will be rendered as the primary Skyline'}
+                            label={'open CSV file'}
+                            ready={(data) => setDurations([...parseDurationsFromCSV(data)])} />
+
+                        <CSVImportButton
+                            tooltip={`Add additional data (optional). Will be rendered
+                                as a second Skyline mirrored around the x-axis`}
+                            label={<AddIcon />}
+                            ready={(data) => setSecondaryDurations(parseDurationsFromCSV(data))} />
 
                         <Button
                             variant='contained'
@@ -124,7 +142,6 @@ export function DataImport(props: DataImportProps) {
                             }} />
 
                         <Button
-                            sx={{ m: 1 }}
                             variant='outlined'
                             onClick={() => {
                                 if (jsonInputFile && jsonInputFile.current) {

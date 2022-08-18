@@ -22,7 +22,16 @@ type BoxProps = {
 }
 
 /**
- * Renders a single `Duration` object into the Skyline.
+ * Renders a single `Duration` object into the Skyline and 
+ * provides a `Dialog` to modify its appearance.
+ * 
+ * @prop duration - the Duration object to be rendered
+ * @prop stretchX - horizontal stretch
+ * @prop stretchY - vertical stretch
+ * @prop onExpand - function called when a box is clicked with the alt key pressed
+ * @prop onSelect - function called when a box is clicked
+ * @prop onRemove - function called when a box is clicked with alt and shift pressed
+ * @prop onUpdateAppearance - function called once the appearance of a box was modified
  */
 export function Box(props: BoxProps) {
   const { duration, stretchX, stretchY, onUpdateAppearance, onExpand, onSelect, onRemove } = props
@@ -35,10 +44,12 @@ export function Box(props: BoxProps) {
   let lowerY = 0
   let upperY = (end-start)*-stretchY
 
-  if (duration.degree) {
+  const adjustToDegree = duration.degree !== undefined
+
+  if (adjustToDegree) {
     const height = 0.2 * (end - start) * stretchY
-    lowerY = duration.degree * -stretchY - (height / 2)
-    upperY = duration.degree * -stretchY + (height / 2)
+    lowerY = duration.degree! * -stretchY - (height / 2)
+    upperY = duration.degree! * -stretchY + (height / 2)
   }
 
   return (
@@ -66,7 +77,7 @@ export function Box(props: BoxProps) {
         dominantBaseline='middle'
         textAnchor='middle'
         x={start * stretchX + 0.5 * (end - start) * stretchX}
-        y={duration.degree ? duration.degree * -stretchY : upperY}
+        y={adjustToDegree ? duration.degree! * -stretchY : upperY}
         fontFamily='serif'
         fontSize='10'>{label}</text>
 

@@ -11,6 +11,8 @@ type ButterflyProps = {
 /**
  * Combines the `Skyline`s into a single SVG element 
  * and provides them with vertical and horizontal rulers.
+ * 
+ * @prop children - one or two `Skyline` elements to be parsed as "wings" of the Butterfly.
  */
 export default function Butterfly(props: ButterflyProps) {
   const { children } = props

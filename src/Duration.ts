@@ -7,6 +7,12 @@ export type Duration = {
   degree?: number
 }
 
+/**
+ * A wrapper around an array of `Duration`s. Provides 
+ * useful methods for working with durations, such as 
+ * sorting by their lengthes, finding the first and the 
+ * last onset times etc.
+ */
 export class DurationCluster {
   durations: Duration[]
 
