@@ -10,8 +10,6 @@ type VerticalRulerProps = {
 export function VerticalRuler(props: VerticalRulerProps) {
   const { stretchY, x, ticks, minDegree, maxDegree, height } = props
 
-  console.log(minDegree, maxDegree)
-
   if (minDegree !== undefined && maxDegree !== undefined) {
     return (
       <g className='verticalRuler'>
@@ -45,6 +43,7 @@ export function VerticalRuler(props: VerticalRulerProps) {
   }
   else if (ticks) {
     let nTicks = Math.max(1, Math.abs(Math.floor((height / stretchY) / ticks)) + 1)
+
     return (
       <g className='verticalRuler'>
         <line 

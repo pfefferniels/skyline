@@ -1,7 +1,6 @@
 import React from "react"
-import { Duration, DurationCluster } from "./Duration"
+import { DurationCluster } from "./Duration"
 import { HorizontalRuler } from "./HorizontalRuler"
-import { Skyline } from "./Skyline"
 import { VerticalRuler } from "./VerticalRuler"
 
 type ButterflyProps = {
@@ -35,10 +34,6 @@ export default function Butterfly(props: ButterflyProps) {
     }
   })
 
-  if (stretchX) console.log(stretchX)
-
-  console.log(stretchX, stretchY, upperDurations, lowerDurations)
-
   if (!stretchX || !stretchY) {
     return (
       <p>both, stretchX and stretchY must be given.</p>
@@ -55,9 +50,15 @@ export default function Butterfly(props: ButterflyProps) {
   const lowerStart = lowerDurations ? lowerDurations.start() : 0
   const upperEnd = upperDurations ? upperDurations.end() : 0
   const lowerEnd = lowerDurations ? lowerDurations.end() : 0
-  const upperVerticalMax = upperDurations ? upperDurations.longestDuration() : 0
-  const lowerVerticalMax = lowerDurations ? lowerDurations.longestDuration() : 0
-  const upperHeight = stretchY * upperVerticalMax
+  const upperVerticalMax =
+    upperDurations ?
+      upperDurations.hasDegrees() ? upperDurations.highestDegree() : upperDurations.longestDuration()
+      : 0
+  const lowerVerticalMax =
+    lowerDurations ?
+      lowerDurations.hasDegrees() ? lowerDurations.highestDegree() : lowerDurations.longestDuration()
+      : 0
+  const upperHeight = -stretchY * upperVerticalMax
   const lowerHeight = stretchY * lowerVerticalMax
 
   const start = lowerDurations ? Math.min(upperStart, lowerStart) : upperStart
@@ -74,12 +75,12 @@ export default function Butterfly(props: ButterflyProps) {
         className='butterfly'
         style={{ margin: '3rem' }}
         width={width + margin * 2}
-        height={upperHeight + lowerHeight + margin * 2}
+        height={-upperHeight + lowerHeight + margin * 2}
         viewBox={[
-          startX - margin,                    // x
-          -upperHeight - margin,              // y
-          width + margin,                     // width
-          upperHeight + lowerHeight + margin  // height
+          startX - margin,                        // x
+          upperHeight - margin,                   // y
+          width + margin,                         // width
+          -upperHeight + lowerHeight + margin * 2 // height
         ].join(' ')}>
         <HorizontalRuler stretchX={stretchX} start={start} end={end} />
 

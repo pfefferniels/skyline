@@ -48,6 +48,10 @@ export class DurationCluster {
     return false
   }
 
+  highestDegree() {
+    return Math.max(...this.durations.map(d => d.degree || 0))
+  }
+  
   longestDuration() {
     return Math.max(...this.durations.map(d => d.end - d.start))
   }

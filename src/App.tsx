@@ -38,10 +38,11 @@ function App() {
           aria-label="upload file"
           disabled={!importReady}
           onClick={() => {
-            // start all over
-            setDurations(new DurationCluster([]))
-            setSecondaryDurations(new DurationCluster([]))
-            setImportReady(false)
+            // start all over. 
+            // TODO: Ideally, duration and secondaryDuration
+            // are simpley reset and import ready is set to false. However
+            // that won't trigger an update on the `Butterfly` component.
+            window.location.reload()
           }}>
           <UploadFileOutlined />
         </IconButton>
