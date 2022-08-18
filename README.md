@@ -1,4 +1,4 @@
-# skyline
+# Skyline Editor
 Simple online tool to generate Skyline visualizations, cf. Hermann Gottschewski,
 Die Interpretation als Kunstwerk, Laaber 1996. ([example](http://fusehime.c.u-tokyo.ac.jp/gottschewski/doc/dissgraphics/Hauptgraphik3.JPG))
 
@@ -16,3 +16,5 @@ Christophe Rousset.
 
 ![example1](./examples/example2.png)
 
+## References
+Bausch, Sebastian, Gebauer, Johannes, & Vollmer, Frithjof. (2021). "SKYLINE2 (Butterfly plus)" Visualisations of Timing in Recorded Musical Performances (Excel Template). Zenodo. [https://doi.org/10.5281/zenodo.5808867](https://doi.org/10.5281/zenodo.5808867)
