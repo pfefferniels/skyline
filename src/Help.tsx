@@ -21,7 +21,9 @@ export function Help(props: HelpProps) {
 
         <p>
           It is possible to add an additional layer which will be displayed as a second Skyline
-          mirrored on the x-axis ("Butterfly").
+          mirrored on the x-axis ("Butterfly"), similarly 
+          to <a href="https://zenodo.org/record/5808867">this Excel template</a> by
+          Bausch, Gebauer &amp; Vollmer 2021.
         </p>
 
         <p>
@@ -41,10 +43,12 @@ export function Help(props: HelpProps) {
           first box, then keeping the <kbd>shift</kbd> key down and clicking on one
           of the following boxes. A new box will appear that includes both.
         </p>
+
         <p>
-          In order to delete wrongly combined boxes, hold <kbd>shift</kbd> and <kbd>alt</kbd> at 
+          In order to delete boxes, hold <kbd>shift</kbd> and <kbd>alt</kbd> at 
           the same time and click on the box to be deleted.
         </p>
+
         <p>
           In order to change the visual appearence of a box, hold the <kbd>alt</kbd> key and 
           click on the box you want to edit. Here you can add a label text and change 
