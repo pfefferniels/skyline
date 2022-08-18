@@ -1,10 +1,10 @@
 import { useCallback, useEffect } from "react"
 import { Box } from "./Box"
-import { Duration } from "./Duration"
+import { Duration, DurationCluster } from "./Duration"
 
 type SkylineProps = {
-  durations: Duration[]
-  setDurations: (newDurations: Duration[]) => void
+  durations: DurationCluster
+  setDurations: (newDurations: DurationCluster) => void
   stretchX: number
   stretchY: number
 }
@@ -20,8 +20,8 @@ export function Skyline(props: SkylineProps) {
 
   const escFunction = useCallback((event: KeyboardEvent) => {
     if (event.key === 'Escape') {
-      for (const d of durations) d.selected = false
-      setDurations([...durations])
+      durations.unselectAll()
+      setDurations(new DurationCluster(durations.durations))
     }
   }, [durations])
 
@@ -30,51 +30,44 @@ export function Skyline(props: SkylineProps) {
     return () => document.removeEventListener('keydown', escFunction, false)
   }, [durations])
 
-  const compareDurations = (a: Duration, b: Duration) => {
-    const lengthA = a.end - a.start 
-    const lengthB = b.end - b.start
-    return lengthB - lengthA
-  }
-
   return (
     <>
-      {durations?.sort(compareDurations).map((duration: Duration, index: number) => {
+      {durations?.sort().map((duration: Duration, index: number) => {
         return (
           <Box key={`box${index}`}
                duration={duration}
                stretchX={props.stretchX || 0}
                stretchY={props.stretchY || 0}
                onUpdateAppearance={(color: string, label: string) => {
-                let newDurations = [...durations]
+                let newDurations = [...durations.durations]
                 newDurations[index].color = color 
                 newDurations[index].label = label
-                setDurations(newDurations)
+                setDurations(new DurationCluster(newDurations))
                }}
                onSelect={() => {
-                 for (const d of durations) d.selected = false
-                 const newDurations = [...durations, {
+                 durations.unselectAll()
+                 const newDurations = [...durations.durations, {
                   start: duration.start,
                   end: duration.end,
                   color: 'gray',
                   selected: true
                  }]
-                 setDurations(newDurations)
+                 setDurations(new DurationCluster(newDurations))
                }}
                onExpand={() => {
-                 let newDurations = [...durations]
+                 let newDurations = [...durations.durations]
                  const selected = newDurations.find((d: Duration) => d.selected)
                  if (selected) {
                   selected.end = duration.end
-                  setDurations(newDurations)
+                  setDurations(new DurationCluster(newDurations))
                  }
                }}
                onRemove={() => {
-                 const newDurations = [...durations.filter((curr: Duration) => curr !== duration)]
-                 setDurations(newDurations)
+                 durations.removeDuration(duration)
+                 setDurations(new DurationCluster(durations.durations))
                }} />
         )
       })}
     </>
   )
 }
-  

@@ -6,13 +6,14 @@ import { Help } from './Help';
 import { Export } from './Export';
 import { Settings } from './Settings';
 import { ZoomControls } from './ZoomControls';
-import { Duration } from './Duration';
+import { Duration, DurationCluster } from './Duration';
 import { DataImport } from './DataImport';
+import { Skyline } from './Skyline';
 import './App.css';
 
 function App() {
-  const [upperDurations, setUpperDurations] = useState<Duration[]>([])
-  const [lowerDurations, setLowerDurations] = useState<Duration[]>([])
+  const [durations, setDurations] = useState<DurationCluster>()
+  const [secondaryDurations, setSecondaryDurations] = useState<DurationCluster>()
   const [importReady, setImportReady] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
@@ -38,8 +39,8 @@ function App() {
           disabled={!importReady}
           onClick={() => {
             // start all over
-            setUpperDurations([])
-            setLowerDurations([])
+            setDurations(new DurationCluster([]))
+            setSecondaryDurations(new DurationCluster([]))
             setImportReady(false)
           }}>
           <UploadFileOutlined />
@@ -67,16 +68,26 @@ function App() {
       </Box>
 
       {importReady ?
-        <Butterfly
-          stretchX={stretchX}
-          stretchY={stretchY}
-          upperDurations={upperDurations} setUpperDurations={setUpperDurations}
-          lowerDurations={lowerDurations} setLowerDurations={setLowerDurations} />
+        <Butterfly>
+          <Skyline
+            durations={durations!}
+            setDurations={setDurations}
+            stretchX={stretchX}
+            stretchY={stretchY} />
+
+          {secondaryDurations && (
+            <Skyline
+              durations={secondaryDurations}
+              setDurations={setSecondaryDurations}
+              stretchX={stretchX}
+              stretchY={-stretchY} />
+          )}
+        </Butterfly>
         :
         <DataImport
           setImportReady={setImportReady}
-          setDurations={setUpperDurations}
-          setSecondaryDurations={setLowerDurations} />
+          setDurations={(durations: Duration[]) => setDurations(new DurationCluster(durations))}
+          setSecondaryDurations={(durations: Duration[]) => setSecondaryDurations(new DurationCluster(durations))} />
       }
 
       <Settings open={showSettings} onClose={() => setShowSettings(false)} />
@@ -86,8 +97,8 @@ function App() {
       <Export
         open={showExport}
         onClose={() => setShowExport(false)}
-        durations={upperDurations}
-        secondaryDurations={lowerDurations}/>
+        durations={durations?.durations || []}
+        secondaryDurations={secondaryDurations?.durations || []}/>
 
       <div className='copyright'>© Niels Pfeffer</div>
     </div>
