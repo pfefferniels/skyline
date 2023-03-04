@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/skyline/static/css/main.499a6492.css",
-    "main.js": "/skyline/static/js/main.1d3c73d4.js",
+    "main.js": "/skyline/static/js/main.afc722ee.js",
     "static/js/787.bfe2863c.chunk.js": "/skyline/static/js/787.bfe2863c.chunk.js",
     "index.html": "/skyline/index.html",
     "main.499a6492.css.map": "/skyline/static/css/main.499a6492.css.map",
-    "main.1d3c73d4.js.map": "/skyline/static/js/main.1d3c73d4.js.map",
+    "main.afc722ee.js.map": "/skyline/static/js/main.afc722ee.js.map",
     "787.bfe2863c.chunk.js.map": "/skyline/static/js/787.bfe2863c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.499a6492.css",
-    "static/js/main.1d3c73d4.js"
+    "static/js/main.afc722ee.js"
   ]
 }
