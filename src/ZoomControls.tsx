@@ -14,7 +14,7 @@ export function ZoomControls(props: ZoomControlsProps) {
             <Slider
               aria-label="Horizontal Stretch"
               valueLabelDisplay="auto"
-              defaultValue={8} step={2} min={1} max={50} marks
+              defaultValue={8} step={0.5} min={0.5} max={50} marks
               onChange={(event: Event, value: number | number[]) => setStretchX(value as number)}
             />
           </div>

@@ -23,12 +23,12 @@ export function Skyline(props: SkylineProps) {
       durations.unselectAll()
       setDurations(new DurationCluster(durations.durations))
     }
-  }, [durations])
+  }, [durations, setDurations])
 
   useEffect(() => {
     document.addEventListener('keydown', escFunction, false);
     return () => document.removeEventListener('keydown', escFunction, false)
-  }, [durations])
+  }, [durations, escFunction])
 
   return (
     <>
@@ -37,8 +37,8 @@ export function Skyline(props: SkylineProps) {
           <Box key={`box${index}`}
                duration={duration}
                stretchX={props.stretchX || 0}
-               stretchY={props.stretchY || 0}
-               onUpdateAppearance={(color: string, label: string) => {
+               stretchY={props.stretchY  || 0}
+               onUpdateAppearance={(label: string, color?: string) => {
                 let newDurations = [...durations.durations]
                 newDurations[index].color = color 
                 newDurations[index].label = label

@@ -29,6 +29,7 @@ export function VerticalRuler(props: VerticalRulerProps) {
 
           return (
             <text
+              key={`vertical_tick_${i}`}
               dominantBaseline='middle'
               textAnchor='start'
               x={Math.floor(x)-10}

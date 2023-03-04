@@ -1,7 +1,7 @@
 export type Duration = {
   start: number
   end: number
-  color: string
+  color?: string
   selected: boolean
   label?: string
   degree?: number

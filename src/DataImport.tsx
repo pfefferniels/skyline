@@ -25,7 +25,7 @@ const parseDurationsFromCSV = (data: any[]): Duration[] => {
             end: (+row[0]) + (+row[2]),
             label: row[3],
             degree: +row[1],
-            color: 'white',
+            color: undefined,
             selected: false
         }))
     }

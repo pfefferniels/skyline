@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Duration } from "./Duration"
 import {
   Button,
@@ -10,15 +10,16 @@ import {
 } from "@mui/material";
 import { HexColorPicker } from "react-colorful"
 import ReactDOM from "react-dom";
+import { SettingsContext } from "./SettingsContext";
 
 type BoxProps = {
   duration: Duration
-  stretchX: number 
+  stretchX: number
   stretchY: number
   onExpand: () => void
   onSelect: () => void
   onRemove: () => void
-  onUpdateAppearance: (color: string, label: string) => void
+  onUpdateAppearance: (label: string, color?: string) => void
 }
 
 /**
@@ -36,13 +37,16 @@ type BoxProps = {
 export function Box(props: BoxProps) {
   const { duration, stretchX, stretchY, onUpdateAppearance, onExpand, onSelect, onRemove } = props
   const { start, end, label, color, selected } = duration
+
+  const { showLabels, useLines } = useContext(SettingsContext)
+
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false)
 
   const [currentColor, setCurrentColor] = useState(color)
   const [currentLabel, setCurrentLabel] = useState(label)
 
   let lowerY = 0
-  let upperY = (end-start)*-stretchY
+  let upperY = (end - start) * -stretchY
 
   const adjustToDegree = duration.degree !== undefined
 
@@ -52,16 +56,72 @@ export function Box(props: BoxProps) {
     upperY = duration.degree! * -stretchY + (height / 2)
   }
 
+  if (useLines && duration.degree) {
+    return (
+      <g>
+        <line
+          className='box'
+          x1={start * stretchX}
+          y1={duration.degree * -stretchY}
+          x2={end * stretchX}
+          y2={duration.degree * - stretchY}
+          stroke={color || 'black'}
+          strokeWidth={selected ? 9 : 7}
+          onClick={(e) => {
+            if (e.shiftKey && e.altKey) onRemove()
+            else if (e.shiftKey) onExpand()
+            else if (e.altKey) setShowEditDialog(true)
+            else onSelect()
+          }} />
+        {showLabels && (
+          <text
+            className='boxLabel'
+            alignmentBaseline='central'
+            dominantBaseline='middle'
+            textAnchor='middle'
+            x={start * stretchX + 0.5 * (end - start) * stretchX}
+            y={adjustToDegree ? duration.degree! * -stretchY : upperY}
+            fontFamily='serif'
+            fontSize='10'>{label}</text>
+        )}
+
+        {ReactDOM.createPortal(
+          <Dialog open={showEditDialog} onClose={() => setShowEditDialog(false)}>
+            <DialogTitle>Edit Box</DialogTitle>
+
+            <DialogContent>
+              <TextField
+                label='Label'
+                size='small'
+                value={currentLabel}
+                onChange={(e) => setCurrentLabel(e.target.value)}
+                autoFocus
+              />
+
+              <HexColorPicker color={currentColor} onChange={setCurrentColor} />
+            </DialogContent>
+
+            <DialogActions>
+              <Button onClick={() => {
+                setShowEditDialog(false)
+                onUpdateAppearance(currentLabel || '', currentColor)
+              }}>Update</Button>
+            </DialogActions>
+          </Dialog>, document.querySelector('#root')!)}
+      </g>
+    )
+  }
+
   return (
     <g>
       <polygon
         className='box'
         points={[[start * stretchX, lowerY].join(','), // start point
-                 [start * stretchX, upperY].join(','), // move up
-                 [end * stretchX,   upperY].join(','), // move left
-                 [end * stretchX,   lowerY].join(',')  // move down
-                ].join(' ')}
-        fill={color}
+        [start * stretchX, upperY].join(','), // move up
+        [end * stretchX, upperY].join(','), // move left
+        [end * stretchX, lowerY].join(',')  // move down
+        ].join(' ')}
+        fill={color || 'white'}
         fillOpacity={0.6}
         stroke={'black'}
         strokeWidth={selected ? 2 : 1}
@@ -71,38 +131,40 @@ export function Box(props: BoxProps) {
           else if (e.altKey) setShowEditDialog(true)
           else onSelect()
         }} />
-      <text
-        className='boxLabel'
-        alignmentBaseline='central'
-        dominantBaseline='middle'
-        textAnchor='middle'
-        x={start * stretchX + 0.5 * (end - start) * stretchX}
-        y={adjustToDegree ? duration.degree! * -stretchY : upperY}
-        fontFamily='serif'
-        fontSize='10'>{label}</text>
+      {showLabels && (
+        <text
+          className='boxLabel'
+          alignmentBaseline='central'
+          dominantBaseline='middle'
+          textAnchor='middle'
+          x={start * stretchX + 0.5 * (end - start) * stretchX}
+          y={adjustToDegree ? duration.degree! * -stretchY : upperY}
+          fontFamily='serif'
+          fontSize='10'>{label}</text>
+      )}
 
       {ReactDOM.createPortal(
         <Dialog open={showEditDialog} onClose={() => setShowEditDialog(false)}>
-        <DialogTitle>Edit Box</DialogTitle>
+          <DialogTitle>Edit Box</DialogTitle>
 
-        <DialogContent>
-          <TextField
-            label='Label'
-            size='small'
-            value={currentLabel}
-            onChange={(e) => setCurrentLabel(e.target.value)}
-            autoFocus
-          />
+          <DialogContent>
+            <TextField
+              label='Label'
+              size='small'
+              value={currentLabel}
+              onChange={(e) => setCurrentLabel(e.target.value)}
+              autoFocus
+            />
 
-          <HexColorPicker color={currentColor} onChange={setCurrentColor} />
-        </DialogContent>
+            <HexColorPicker color={currentColor} onChange={setCurrentColor} />
+          </DialogContent>
 
-        <DialogActions>
-          <Button onClick={() => {
-            setShowEditDialog(false)
-            onUpdateAppearance(currentColor, currentLabel || '')
-          }}>Update</Button>
-        </DialogActions>
+          <DialogActions>
+            <Button onClick={() => {
+              setShowEditDialog(false)
+              onUpdateAppearance(currentLabel || '', currentColor)
+            }}>Update</Button>
+          </DialogActions>
         </Dialog>, document.querySelector('#root')!)}
     </g>
   )
