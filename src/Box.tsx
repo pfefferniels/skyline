@@ -80,7 +80,7 @@ export function Box(props: BoxProps) {
             dominantBaseline='middle'
             textAnchor='middle'
             x={start * stretchX + 0.5 * (end - start) * stretchX}
-            y={adjustToDegree ? duration.degree! * -stretchY : upperY}
+            y={(adjustToDegree ? duration.degree! * -stretchY : upperY) + 10}
             fontFamily='serif'
             fontSize='10'>{label}</text>
         )}

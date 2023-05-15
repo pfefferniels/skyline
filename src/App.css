@@ -25,7 +25,10 @@
 .import {
   display: flex;
   flex-direction: row;
-  margin-bottom: 1rem;
+}
+
+.importAs {
+  margin-bottom: 3rem;
 }
 
 .options {
