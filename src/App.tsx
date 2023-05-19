@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, IconButton } from '@mui/material';
+import { Box, Divider, IconButton } from '@mui/material';
 import { HelpOutlined, UploadFileOutlined, SaveAsOutlined, TuneOutlined } from '@mui/icons-material';
 import Butterfly from './Butterfly';
 import { Help } from './Help';
@@ -11,6 +11,8 @@ import { DataImport } from './DataImport';
 import { Skyline } from './Skyline';
 import './App.css';
 import { SettingsContext } from './SettingsContext';
+import { Cursor } from './Cursor';
+import AudioPlayer from './AudioPlayer';
 
 function App() {
   const [durations, setDurations] = useState<DurationCluster>()
@@ -21,6 +23,7 @@ function App() {
   const [showExport, setShowExport] = useState(false)
   const [stretchX, setStretchX] = useState(8)
   const [stretchY, setStretchY] = useState(8)
+  const [currentTime, setCurrentTime] = useState<number>()
 
   // settings
   const [useLines, setUseLines] = useState(false)
@@ -72,6 +75,10 @@ function App() {
           onClick={() => setShowHelp(true)}>
           <HelpOutlined />
         </IconButton>
+
+        <Divider orientation='vertical' flexItem />
+
+        <AudioPlayer onTimeUpdate={(time) => setCurrentTime(time)} />
       </Box>
 
       {importReady ?
@@ -94,6 +101,11 @@ function App() {
                 stretchX={stretchX}
                 stretchY={-stretchY} />
             )}
+            {currentTime &&
+              <Cursor
+                position={currentTime * stretchX}
+                height={stretchY * 100} />
+            }
           </Butterfly>
         </SettingsContext.Provider>
         :
