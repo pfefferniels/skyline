@@ -16,5 +16,11 @@ Christophe Rousset.
 
 ![example1](./examples/example2.png)
 
+**Example 3**
+Fragments of the solo violin in Mahler's 4th symphony, based on a recording by Claudio Abbado and the Vienna 
+Philharmonic. The graphic was created by Pia Schumacher.
+
+![example3](./examples/example3.png)
+
 ## References
 Bausch, Sebastian, Gebauer, Johannes, & Vollmer, Frithjof. (2021). "SKYLINE2 (Butterfly plus)" Visualisations of Timing in Recorded Musical Performances (Excel Template). Zenodo. [https://doi.org/10.5281/zenodo.5808867](https://doi.org/10.5281/zenodo.5808867)
